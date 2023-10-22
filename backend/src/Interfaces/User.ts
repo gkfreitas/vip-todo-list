@@ -1,5 +1,7 @@
+import { ObjectId } from "mongoose";
+
 export default interface IUser {
-  _id?: string,
+  id: ObjectId,
   username: string,
   email: string,
   password: string,

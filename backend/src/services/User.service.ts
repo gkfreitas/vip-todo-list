@@ -1,8 +1,10 @@
+import * as bcrypt from 'bcrypt';
 import { ServiceResponse } from "../Interfaces/ServiceResponse";
 import { IToken } from "../Interfaces/Token";
 import IUser from "../Interfaces/User";
 import IUserModel from "../Interfaces/UserModel";
-import UserModel from "../models/User";
+import UserModel from "../models/User.model";
+import jwtUtil from '../utils/jwt.util';
 
 export default class UserService {
   constructor (
@@ -10,6 +12,13 @@ export default class UserService {
   ) {}
 
   public async findUser(login: IUser): Promise<ServiceResponse<IToken>> {
-    const user = await this.userModel.find
+    const user = await this.userModel.find(login)
+    if (!user || !bcrypt.compareSync(login.password, user.password)) {
+      return { status: 'NOT_FOUND', data: { message: 'Invalid email or password' } };
+    }
+    const { id, email } = user;
+
+    const token = jwtUtil.sign({ id, email });
+    return { status: 'SUCCESSFUL', data: { token } };
   }
 }
