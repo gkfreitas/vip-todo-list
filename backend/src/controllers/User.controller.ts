@@ -9,7 +9,6 @@ export default class LoginController {
   ) { }
 
   public async findUser(req: Request, res: Response) {
-
     const { email, password }: ILogin = req.body
     
     const ServiceResponse = await this.userService.findUser({ email, password});
