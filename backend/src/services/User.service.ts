@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
+import ILogin from '../Interfaces/Login';
 import { ServiceResponse } from "../Interfaces/ServiceResponse";
 import { IToken } from "../Interfaces/Token";
-import IUser from "../Interfaces/User";
 import IUserModel from "../Interfaces/UserModel";
 import UserModel from "../models/User.model";
 import jwtUtil from '../utils/jwt.util';
@@ -11,7 +11,7 @@ export default class UserService {
     private userModel: IUserModel = new UserModel()
   ) {}
 
-  public async findUser(login: IUser): Promise<ServiceResponse<IToken>> {
+  public async findUser(login: ILogin): Promise<ServiceResponse<IToken>> {
     const user = await this.userModel.find(login)
     if (!user || !bcrypt.compareSync(login.password, user.password)) {
       return { status: 'NOT_FOUND', data: { message: 'Invalid email or password' } };
