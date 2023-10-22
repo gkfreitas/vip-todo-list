@@ -1,0 +1,19 @@
+{
+  "name": "ivipcoin-todo-list",
+  "version": "1.0.0",
+  "description": "Gerenciamento de tarefas Full Stack.",
+  "main": "index.js",
+  "scripts": {
+    "install:front": "cd ./frontend && npm install",
+    "install:back": "cd ./backend && npm install",
+    "install:apps": "npm run install:front && npm run install:back",
+    "compose:up": "docker-compose up -d --build",
+    "compose:down": "docker-compose down --remove-orphans",
+    "logs": "docker-compose logs -f"
+  },
+  "author": "GKFreitas",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^7.6.3"
+  }
+}
