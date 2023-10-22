@@ -10,7 +10,7 @@ export default class App {
 
     this.config();
 
-    this.startDB()
+    this.startDB();
 
     this.app.get('/', (_req, res) => res.json({ ok: true }));
   }
@@ -23,13 +23,13 @@ export default class App {
       next();
     };
 
-    this.app.use(cors())
+    this.app.use(cors());
     this.app.use(express.json());
     this.app.use(accessControl);
   }
 
   public startDB() {
-    new MongoDB()
+    new MongoDB();
   }
 
   public start(PORT: string | number): void {
