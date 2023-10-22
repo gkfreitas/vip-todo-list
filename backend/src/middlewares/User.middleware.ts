@@ -55,6 +55,7 @@ export default class LoginValidations {
 
     try {
       const decoded = jwtUtil.verify(token);
+
       const user = await MongooseUserModel.findOne({email: decoded.email });
       if (!user) return res.status(401).json({ message: 'Token must be a valid token' });
       next();
