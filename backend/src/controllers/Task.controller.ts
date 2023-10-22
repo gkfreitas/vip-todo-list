@@ -36,4 +36,10 @@ export default class TaskController {
     return res.status(200).json(ServiceResponse.data)
   }
 
+  public async findAllTasks(req: Request, res: Response) {
+    const ServiceResponse = await this.taskService.findAllTasks()
+
+    return res.status(200).json(ServiceResponse.data)
+  }
+
 }

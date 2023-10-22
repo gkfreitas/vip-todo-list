@@ -30,4 +30,10 @@ export default class TaskService {
 
     return { status: 'SUCCESSFUL', data: oldTask}
   }
+
+  public async findAllTasks(): Promise<ServiceResponse<ITask[]>> {
+    const allTasks = await this.taskModel.findAll()
+
+    return { status: 'SUCCESSFUL', data: allTasks}
+  }
 }

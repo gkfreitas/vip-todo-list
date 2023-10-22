@@ -5,6 +5,11 @@ const userController = new TaskController();
 
 const router = Router();
 
+router.get(
+  '/',
+  (req: Request, res: Response) => userController.findAllTasks(req, res)
+)
+
 router.post(
   '/',
   Validations.validateTask,
@@ -13,6 +18,7 @@ router.post(
 
 router.put(
   '/',
+  Validations.validateTask,
   (req: Request, res: Response) => userController.updatedTask(req, res)
 )
 

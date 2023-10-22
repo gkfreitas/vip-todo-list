@@ -39,4 +39,10 @@ export default class TaskModel implements ITaskModel {
     }
   }
 
+  public async findAll(): Promise<ITask[]> {
+    const allTasks = await this.model.find().exec()
+    return allTasks
+
+  }
+
 }
