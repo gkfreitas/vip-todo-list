@@ -11,11 +11,11 @@ export const taskSchema: Schema = new Schema<ITask>({
     require: true,
   },
   startDate: {
-    type: Date,
+    type: String,
     require: true,
   },
   dueDate: {
-    type: Date,
+    type: String,
     require: true,
   },
   priority: {

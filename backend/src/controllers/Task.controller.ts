@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import TaskService from "../services/Task.service";
 
-export default class LoginController {
+export default class TaskController {
   constructor(
     private taskService = new TaskService(),
   ) { }
@@ -20,6 +20,16 @@ export default class LoginController {
     const { _id } = body
 
     const ServiceResponse = await this.taskService.updateTask(body, _id)
+
+    if (ServiceResponse.status !== 'SUCCESSFUL') return res.status(404).json(ServiceResponse.data)
+
+    return res.status(200).json(ServiceResponse.data)
+  }
+
+  public async deleteTask(req: Request, res: Response) {
+    const { _id} = req.body
+
+    const ServiceResponse = await this.taskService.deleteTask(_id);
 
     if (ServiceResponse.status !== 'SUCCESSFUL') return res.status(404).json(ServiceResponse.data)
 

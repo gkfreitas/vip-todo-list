@@ -8,7 +8,7 @@ function extractToken(authorization: string) {
   return authorization.split(' ')[1];
 }
 
-class Validations {
+export default class LoginValidations {
   static validateLogin(req: Request, res: Response, next: NextFunction): Response | void {
     const { email, password }: ILogin = req.body;
 
@@ -65,5 +65,3 @@ class Validations {
 
 
 }
-
-export default Validations;

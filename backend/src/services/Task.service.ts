@@ -11,14 +11,23 @@ export default class TaskService {
 
   public async createTask(task: ITask): Promise<ServiceResponse<ITask>> {
     const newTask = await this.taskModel.create(task)
+
     return { status: 'SUCCESSFUL', data: newTask}
   }
 
-  public async updateTask(task: ITask, id:ObjectId): Promise<ServiceResponse<ITask>> {
+  public async updateTask(task: ITask, id: ObjectId): Promise<ServiceResponse<ITask>> {
     const updatedTask = await this.taskModel.update(task, id)
 
     if (!updatedTask) return { status: 'NOT_FOUND', data: {message: 'ID não encontrado'}}
 
     return { status: 'SUCCESSFUL', data: updatedTask}
+  }
+
+  public async deleteTask(id: ObjectId): Promise<ServiceResponse<ITask>> {
+    const oldTask = await this.taskModel.delete(id);
+
+    if (!oldTask) return { status: 'NOT_FOUND', data: {message: 'ID não encontrado'}}
+
+    return { status: 'SUCCESSFUL', data: oldTask}
   }
 }
