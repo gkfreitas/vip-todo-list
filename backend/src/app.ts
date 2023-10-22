@@ -1,6 +1,7 @@
 import * as cors from 'cors';
 import * as express from 'express';
 import MongoDB from './DB/conn';
+import router from './routers';
 
 export default class App {
   public app: express.Express;
@@ -11,6 +12,8 @@ export default class App {
     this.config();
 
     this.startDB();
+
+    this.routes();
 
     this.app.get('/', (_req, res) => res.json({ ok: true }));
   }
@@ -26,6 +29,10 @@ export default class App {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(accessControl);
+  }
+
+  private routes(): void {
+    this.app.use(router)
   }
 
   public startDB() {

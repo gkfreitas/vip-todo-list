@@ -1,6 +1,7 @@
-import ILogin from "./Login"
+import IRegister from "./Register"
 import IUser from "./User"
 
 export default interface IUserModel {
-  find(login: ILogin): Promise<IUser | null>
+  find(email: string): Promise<IUser | null>
+  create(register: IRegister): Promise<IUser>
 }
