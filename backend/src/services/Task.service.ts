@@ -1,0 +1,39 @@
+import { ObjectId } from 'mongoose';
+import ITaskModel from '../Interfaces/ITaskModel';
+import { ServiceResponse } from "../Interfaces/ServiceResponse";
+import ITask from '../Interfaces/Task';
+import TaskModel from '../models/Task.model';
+
+export default class TaskService {
+  constructor (
+    private taskModel: ITaskModel = new TaskModel()
+  ) {}
+
+  public async createTask(task: ITask): Promise<ServiceResponse<ITask>> {
+    const newTask = await this.taskModel.create(task)
+
+    return { status: 'SUCCESSFUL', data: newTask}
+  }
+
+  public async updateTask(task: ITask, id: ObjectId): Promise<ServiceResponse<ITask>> {
+    const updatedTask = await this.taskModel.update(task, id)
+
+    if (!updatedTask) return { status: 'NOT_FOUND', data: {message: 'ID não encontrado'}}
+
+    return { status: 'SUCCESSFUL', data: updatedTask}
+  }
+
+  public async deleteTask(id: ObjectId): Promise<ServiceResponse<ITask>> {
+    const oldTask = await this.taskModel.delete(id);
+
+    if (!oldTask) return { status: 'NOT_FOUND', data: {message: 'ID não encontrado'}}
+
+    return { status: 'SUCCESSFUL', data: oldTask}
+  }
+
+  public async findAllTasks(): Promise<ServiceResponse<ITask[]>> {
+    const allTasks = await this.taskModel.findAll()
+
+    return { status: 'SUCCESSFUL', data: allTasks}
+  }
+}
