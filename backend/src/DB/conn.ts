@@ -16,6 +16,7 @@ export default class MongoDB {
       console.log(`Erro: ${error}`)
     }
   }
+  
 
   
 }

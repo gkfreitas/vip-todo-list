@@ -15,7 +15,7 @@ export default class App {
 
     this.routes();
 
-    this.app.get('/', (_req, res) => res.json({ ok: true }));
+    this.app.get('/', (_req, res) => res.json({ ok: 'oi' }));
   }
 
   private config():void {
