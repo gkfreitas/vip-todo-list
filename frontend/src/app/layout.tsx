@@ -1,13 +1,5 @@
-import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
+import { Providers } from '../providers/providers';
 import '../styles/globals.css';
-
-const roboto = Roboto({ subsets: ['latin'], weight: '500' });
-
-export const metadata: Metadata = {
-  title: 'VIPTasks',
-  description: 'Gerenciamento de tarefas',
-};
 
 export default function RootLayout({
   children,
@@ -15,8 +7,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="br">
-      <body className={ roboto.className }>{children}</body>
+    <html suppressHydrationWarning lang="br">
+      <Providers>
+        <body>{children}</body>
+      </Providers>
     </html>
   );
 }

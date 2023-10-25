@@ -4,8 +4,12 @@ import FormLogin from '../components/FormLogin';
 
 export default function Home() {
   return (
-    <main className="min-h-screen px-[100px] flex items-center">
+    <main
+      className="min-h-screen sm:px-[100px] px-[20px] flex items-center xl:justify-between
+    container mx-auto justify-center"
+    >
       <Image
+        className="hidden xl:block "
         src={ undrawTasks }
         alt="Desenho uma pessoa indo concluir uma tarefa"
       />
