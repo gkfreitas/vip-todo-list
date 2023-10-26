@@ -4,48 +4,56 @@ import { Button, FormControl } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useContext, useState } from 'react';
-import { requestLogin, setToken } from '../api/api';
+import { requestLogin } from '../api/api';
 import { UserContext } from '../context';
 import { RobotoBold, RobotoLight, poppinsSemiBold } from '../utils/fonts';
 import InputCheckboxForm from './InputCheckboxForm';
 import InputTextForm from './InputTextForm';
 import TitleLogo from './TitleLogo';
 
-type AuthType = {
-  email: string,
+type RegisterType = {
+  username: string,
+  email: string
   password: string
 };
 
-export default function FormLogin() {
+export default function FormRegister() {
   const { userData, resetAllFields } = useContext(UserContext);
-  const { email, password } = userData;
+  const { email, password, username, confirmPassword } = userData;
+  const minLengthUsername = 3;
   const minLengthPassword = 6;
   const isEmailValid = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/.test(email);
   const isPasswordValid = password.length >= minLengthPassword;
-  const enableButton = isEmailValid && isPasswordValid;
+  const isUsernameValid = username.length >= minLengthUsername;
+  const isConfirmPasswordValid = password === confirmPassword;
+  const enableButton = isEmailValid && isPasswordValid
+  && isEmailValid && isUsernameValid && isConfirmPasswordValid;
 
   const router = useRouter();
 
-  const [errorAuth, handleErrorAuth] = useState(false);
+  const [errorRegister, handleErrorRegister] = useState(false);
 
-  const handleLogin = async (login: AuthType) => {
-    const responseData = await requestLogin('/login', login);
+  const handleRegister = async (login: RegisterType) => {
+    const responseData = await requestLogin('/login/create', login);
     if (responseData === undefined) {
-      handleErrorAuth(true);
+      handleErrorRegister(true);
       return true;
     }
-    handleErrorAuth(false);
-    const { token } = responseData;
-    setToken(token);
     resetAllFields();
-    router.push('/main');
+    router.push('/');
   };
 
   const rememberMeElement = (
     <p
       className={ `${RobotoLight.className} text-[10px] tracking-[0.3px] text-[#1E1E1E]` }
     >
-      Lembre-se de mim
+      Eu concordo com
+      {' '}
+      <span className="text-[#000] font-bold">todos</span>
+      {' '}
+      os
+      {' '}
+      <span className="text-[#000] font-bold underline">termos de privacidade</span>
     </p>
   );
 
@@ -54,8 +62,7 @@ export default function FormLogin() {
       className="
         sm:px-[40px] sm:py-[50px]
         px-[30px] py-[15px]
-        sm:max-w-[360px]
-        sm:max-h-[600px]
+        sm:w-[360px]
         max-w-[360px]
         bg-[#fff]
         rounded-[50px]
@@ -68,27 +75,35 @@ export default function FormLogin() {
         text-[#331500] 
         pt-[40px] sm:px-[20px] px-[0px] text-center w-full` }
       >
-        Seja bem-vindo(a)
+        Crie sua conta
       </h2>
-      <h3 className={ `${RobotoLight.className} pt-[20px] text-[12px] sm:text-[18px]` }>
-        Digite seu email e senha
-      </h3>
       <div className="pt-[60px] w-full">
         <InputTextForm
-          name="Email"
+          name="Nome do usuário*"
+          hidePasswordIcon={ false }
+          type="username"
+        />
+        <InputTextForm
+          name="Email*"
           hidePasswordIcon={ false }
           type="email"
         />
         <InputTextForm
-          name="Senha"
+          name="Senha*"
           hidePasswordIcon
           type="password"
         />
+        <InputTextForm
+          name="Confirme sua senha*"
+          hidePasswordIcon
+          type="confirmPassword"
+        />
       </div>
-      <div className="flex justify-between items-center w-full">
+
+      <div className="flex flex-col justify-between items-center w-full">
         <InputCheckboxForm textElement={ rememberMeElement } />
-        {errorAuth
-          ? <p className="text-[12px] text-red-400">Email ou senha inválida*</p> : ''}
+        {errorRegister
+          ? <p className="text-[12px] text-red-400">Email já cadastrado*</p> : ''}
       </div>
 
       <Button
@@ -99,19 +114,22 @@ export default function FormLogin() {
         variant="contained"
         size="large"
         disabled={ !enableButton }
-        onClick={ () => handleLogin(userData) }
+        onClick={ () => handleRegister({ username, password, email }) }
       >
-        Entrar
+        Registrar-se
       </Button>
       <p
         className={ `${RobotoLight.className} 
       text-[#4B4B4B] text-[10px] tracking-[0.3px] mt-[30px] ` }
       >
-        Não tem contra?
+        Ja tem conta?
         {' '}
-        <Link href="/register" onClick={ resetAllFields }>
-          <span className="font-bold text-[#000] underline cursor-pointer">
-            Registre-se
+        <Link href="/" onClick={ resetAllFields }>
+          <span
+            role="presentation"
+            className="font-bold text-[#000] underline cursor-pointer"
+          >
+            Faça o login
           </span>
         </Link>
       </p>

@@ -8,31 +8,50 @@ import { UserContext } from '../context';
 type InputTextType = {
   name: string;
   hidePasswordIcon: boolean;
-  type: 'email' | 'password'
+  type: 'email' | 'password' | 'username' | 'confirmPassword'
 };
 
 export default function InputTextForm(props: InputTextType) {
   const { name, hidePasswordIcon, type } = props;
-  const { authData, handleChange } = useContext(UserContext);
+  const { userData, handleChange } = useContext(UserContext);
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  const lenghCase = authData[type].length === 0;
-  const isPassword = type === 'password';
+  const lenghCase = userData[type].length === 0;
+  const isPassword = type === 'password' || type === 'confirmPassword';
   const minLengthPassword = 6;
-  const isEmailValid = lenghCase || /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/.test(authData.email);
-  const isPasswordValid = lenghCase || authData.password.length >= minLengthPassword;
+  const isEmailValid = lenghCase || /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/.test(userData.email);
+  const isPasswordValid = lenghCase || userData.password.length >= minLengthPassword;
+  const isConfirmPasswordValid = userData.password === userData.confirmPassword;
+  const minLengthUsername = 3;
+  const isUsernameValid = lenghCase || userData.username.length >= minLengthUsername;
 
-  console.log(isEmailValid);
+  let errorField;
+  switch (type) {
+    case 'password':
+      errorField = !isPasswordValid;
+      break;
+    case 'confirmPassword':
+      errorField = !isConfirmPasswordValid;
+      break;
+    case 'email':
+      errorField = !isEmailValid;
+      break;
+    case 'username':
+      errorField = !isUsernameValid;
+      break;
+    default:
+      errorField = false;
+  }
 
   return (
     <Box className="flex relative mb-[10px]">
       <TextField
         variant="standard"
-        error={ isPassword ? !isPasswordValid : !isEmailValid }
+        error={ errorField }
         label={ name }
         name={ type }
         type={ passwordVisible && hidePasswordIcon && isPassword ? 'password' : 'text' }
-        value={ authData[type] }
+        value={ userData[type] }
         onChange={ (e) => handleChange(type, e.target.value) }
         className="w-full"
       />

@@ -1,11 +1,22 @@
 import axios from 'axios';
 
+type AuthType = {
+  email: string,
+  password: string
+};
+
 const api = axios.create({
   baseURL: 'http://localhost:3001',
 });
 
 export const setToken = (token: string) => {
   api.defaults.headers.common.Authorization = `Bearer ${token}`;
+  localStorage.setItem('token', token);
+};
+
+export const verifyToken = async () => {
+  const { data } = await api.get('/task');
+  return data;
 };
 
 export const requestData = async (endpoint: string) => {
@@ -13,11 +24,12 @@ export const requestData = async (endpoint: string) => {
   return data;
 };
 
-export const requestLogin = async (endpoint: string, body) => {
+export const requestLogin = async (endpoint: string, body: AuthType) => {
   try {
-    await api.post(endpoint, body);
-  } catch (error) {
-    console.log(error.response.data);
+    const { data } = await api.post(endpoint, body);
+    return data;
+  } catch (error: unknown) {
+    console.log(error);
   }
 };
 

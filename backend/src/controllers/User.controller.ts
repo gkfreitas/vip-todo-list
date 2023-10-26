@@ -23,6 +23,8 @@ export default class LoginController {
 
     const ServiceResponse = await this.userService.createUser({username, email, password});
 
+    if (ServiceResponse.status !== 'SUCCESSFUL') return res.status(401).json(ServiceResponse.data);
+
     return res.status(200).json(ServiceResponse.data)
   }
 
