@@ -1,3 +1,4 @@
+import RedirectLogin from '../Redirect';
 import { Providers } from '../providers/providers';
 import '../styles/globals.css';
 
@@ -7,9 +8,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html suppressHydrationWarning lang="br">
+    <html lang="br">
+
       <Providers>
-        <body>{children}</body>
+        <body>
+          <RedirectLogin />
+          {children}
+        </body>
       </Providers>
     </html>
   );

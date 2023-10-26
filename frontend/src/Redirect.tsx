@@ -2,11 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { setToken, verifyToken } from '../api/api';
+import { setToken, verifyToken } from './api/api';
 
 export default function RedirectLogin() {
   const router = useRouter();
-
   useEffect(() => {
     async function verify() {
       try {
@@ -20,4 +19,7 @@ export default function RedirectLogin() {
     }
     verify();
   });
+  return (
+    <div />
+  );
 }
