@@ -1,8 +1,16 @@
 import axios from 'axios';
 
-type AuthType = {
-  email: string,
-  password: string
+type DeleteType = {
+  _id: string
+};
+
+type DataTask = {
+  taskName: string,
+  tag: string
+  startDate: string
+  dueDate: string
+  priority: string
+  description: string
 };
 
 const api = axios.create({
@@ -24,13 +32,16 @@ export const requestData = async (endpoint: string) => {
   return data;
 };
 
-export const requestLogin = async (endpoint: string, body: AuthType) => {
-  try {
-    const { data } = await api.post(endpoint, body);
-    return data;
-  } catch (error: unknown) {
-    console.log(error);
-  }
+export const deleteTask = async (body: DeleteType) => {
+  const { data } = await api.delete('/task', { data: body });
+  console.log(body);
+  return data;
+};
+
+export const updateTask = async (body: DataTask) => {
+  console.log(body);
+  const { data } = await api.put('task', body);
+  return data;
 };
 
 export default api;

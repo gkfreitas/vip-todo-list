@@ -2,12 +2,17 @@
 
 import React, { createContext, useContext } from 'react';
 import { UserProvider } from '../context';
+import { TaskProvider } from '../context/tasks';
 
 const ProvidersContext = createContext({});
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <UserProvider>{children}</UserProvider>
+    <TaskProvider>
+      <UserProvider>
+        {children}
+      </UserProvider>
+    </TaskProvider>
   );
 }
 

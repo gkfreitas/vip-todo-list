@@ -9,6 +9,7 @@ export default class TaskValidations {
 
     const allFields = [taskName, tag, startDate, dueDate, priority, description];
 
+
     const errorFiled = allFields.some((e) => !e)
 
     if (errorFiled) return res.status(400).json({ message: 'Preencha todos os valores'})

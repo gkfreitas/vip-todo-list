@@ -1,4 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 import { Stack, SvgIcon } from '@mui/material';
 import Paper from '@mui/material/Paper';
@@ -8,10 +9,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from 'react';
-import { requestData } from '../api/api';
+import { useContext, useEffect, useState } from 'react';
+import { deleteTask, requestData, updateTask } from '../api/api';
+import { TaskContext } from '../context/tasks';
+import EditTask from './EditTask';
 
 type DataTask = {
+  _id: string
   taskName: string,
   tag: string
   startDate: string
@@ -22,7 +26,9 @@ type DataTask = {
 
 export default function BasicTable() {
   const [tasks, setTasks] = useState([]);
-
+  const [edit, toggleEdit] = useState(false);
+  const [editedId, setEditedId] = useState('');
+  const { setTaskData, taskData } = useContext(TaskContext);
   useEffect(() => {
     const endpoint = '/task';
 
@@ -38,7 +44,32 @@ export default function BasicTable() {
   const tasksTitle = ['Tarefa', 'Descrição', 'Tag', 'Prioridade', 'Incio', 'Fim',
     'Editar/Deletar'];
 
-  console.log(tasks);
+  const reload = () => {
+    const endpoint = '/task';
+    requestData(endpoint)
+      .then((response) => {
+        setTasks(response);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteTask({ _id: id });
+    reload();
+  };
+
+  const handleEdit = (dataTask: DataTask) => {
+    const { _id: id } = dataTask;
+    toggleEdit(!edit);
+    setEditedId(id);
+    setTaskData(dataTask);
+  };
+
+  const handleUpdate = async () => {
+    await updateTask(taskData);
+    toggleEdit(!edit);
+    reload();
+  };
 
   return (
     <TableContainer component={ Paper }>
@@ -54,33 +85,73 @@ export default function BasicTable() {
         </TableHead>
         <TableBody>
           {
-              tasks.map((dataTask: DataTask) => (
-                <TableRow key={ dataTask.taskName }>
-                  <TableCell component="th" scope="row" align="left">
-                    { dataTask.taskName}
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    { dataTask.description}
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    { dataTask.tag}
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    { dataTask.priority}
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    { dataTask.startDate}
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    { dataTask.dueDate}
-                  </TableCell>
-                  <TableCell component="th" scope="row" align="left">
-                    <Stack direction="row" spacing={ 2 }>
-                      <SvgIcon component={ EditIcon } />
-                      <SvgIcon component={ DeleteIcon } />
-                    </Stack>
-                  </TableCell>
-                </TableRow>
+              tasks.map(({ _id: id,
+                taskName,
+                description,
+                tag,
+                priority,
+                startDate,
+                dueDate }, i) => (
+
+                  <TableRow key={ i }>
+                    <TableCell component="th" scope="row" align="left">
+                      {edit && editedId === id ? <EditTask
+                        type="taskName"
+                      /> : taskName}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {edit && editedId === id ? <EditTask
+                        type="description"
+                      /> : description}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {edit && editedId === id ? <EditTask
+                        type="tag"
+                      /> : tag}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {edit && editedId === id ? <EditTask
+                        type="priority"
+                      /> : priority}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {edit && editedId === id ? <EditTask
+                        type="startDate"
+                      /> : startDate}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      {edit && editedId === id ? <EditTask
+                        type="dueDate"
+                      /> : dueDate}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="left">
+                      <Stack direction="row" spacing={ 2 }>
+                        {edit && editedId === id ? <SvgIcon
+                          component={ DoneIcon }
+                          className="cursor-pointer"
+                          onClick={ () => handleUpdate() }
+                        />
+                          : <SvgIcon
+                              component={ EditIcon }
+                              className="cursor-pointer"
+                              onClick={ () => handleEdit({
+                                _id: id,
+                                taskName,
+                                description,
+                                tag,
+                                priority,
+                                startDate,
+                                dueDate,
+                              }) }
+                          />}
+                        <SvgIcon
+                          component={ DeleteIcon }
+                          className="cursor-pointer"
+                          onClick={ () => handleDelete(id) }
+                        />
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
               ))
             }
         </TableBody>
