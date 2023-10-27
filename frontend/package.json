@@ -2,7 +2,10 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://gkfreitas.github.io/ivipcoin-todo-list",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
