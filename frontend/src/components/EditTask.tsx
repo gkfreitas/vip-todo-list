@@ -16,6 +16,8 @@ export default function EditTask(props: PropsTask) {
 
   const { type } = props;
 
+  console.log(taskData);
+
   const options = [
     {
       value: 'Alta',
