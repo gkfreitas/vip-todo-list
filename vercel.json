@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "./backend/build/server.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "./backend/(.*)",
+      "dest": "./backend/build/server.js"
+    }
+  ]
+}
