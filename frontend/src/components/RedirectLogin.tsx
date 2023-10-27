@@ -20,4 +20,7 @@ export default function RedirectLogin() {
     }
     verify();
   });
+  return (
+    <div />
+  );
 }

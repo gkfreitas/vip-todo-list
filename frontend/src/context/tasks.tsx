@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 
 type TaskInfos = {
+  _id: string
   taskName: string,
   description: string,
   tag: string,
@@ -11,6 +12,8 @@ type TaskInfos = {
 
 type TaskContextProps = {
   taskData: TaskInfos,
+  tasks: TaskInfos[]
+  setTasks(tasks: TaskInfos[]): void
   setTaskData(value: TaskInfos): void,
   handleChange(name: string, value: string): void,
 };
@@ -18,7 +21,17 @@ type TaskContextProps = {
 export const TaskContext = createContext<TaskContextProps>({} as TaskContextProps);
 
 export function TaskProvider({ children }: { children: React.ReactNode }) {
+  const [tasks, setTasks] = useState([{
+    _id: '',
+    taskName: '',
+    description: '',
+    tag: '',
+    priority: '',
+    startDate: '',
+    dueDate: '',
+  }]);
   const [taskData, setTaskData] = useState({
+    _id: '',
     taskName: '',
     description: '',
     tag: '',
@@ -40,6 +53,8 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
         taskData,
         handleChange,
         setTaskData,
+        tasks,
+        setTasks,
       } }
     >
       {children}

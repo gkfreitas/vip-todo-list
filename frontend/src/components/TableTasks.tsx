@@ -1,14 +1,15 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack, SvgIcon } from '@mui/material';
+import { Stack, SvgIcon, styled } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { orange } from '@mui/material/colors';
 import { useContext, useEffect, useState } from 'react';
 import { deleteTask, requestData, updateTask } from '../api/api';
 import { TaskContext } from '../context/tasks';
@@ -25,10 +26,9 @@ type DataTask = {
 };
 
 export default function BasicTable() {
-  const [tasks, setTasks] = useState([]);
   const [edit, toggleEdit] = useState(false);
   const [editedId, setEditedId] = useState('');
-  const { setTaskData, taskData } = useContext(TaskContext);
+  const { setTaskData, taskData, tasks, setTasks } = useContext(TaskContext);
   useEffect(() => {
     const endpoint = '/task';
 
@@ -39,7 +39,7 @@ export default function BasicTable() {
         })
         .catch((error) => console.log(error));
     }
-  }, [tasks]);
+  });
 
   const tasksTitle = ['Tarefa', 'Descrição', 'Tag', 'Prioridade', 'Incio', 'Fim',
     'Editar/Deletar'];
@@ -71,17 +71,39 @@ export default function BasicTable() {
     reload();
   };
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: orange[900],
+      color: theme.palette.common.black,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 12,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
   return (
-    <TableContainer component={ Paper }>
+    <TableContainer
+      component={ Paper }
+      className="max-w-[1000px]"
+    >
       <Table sx={ { minWidth: 650 } } aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <StyledTableRow>
             {
               tasksTitle.map((e: string) => (
-                <TableCell key={ e }>{e}</TableCell>
+                <StyledTableCell key={ e }>{e}</StyledTableCell>
               ))
             }
-          </TableRow>
+          </StyledTableRow>
         </TableHead>
         <TableBody>
           {
@@ -93,38 +115,38 @@ export default function BasicTable() {
                 startDate,
                 dueDate }, i) => (
 
-                  <TableRow key={ i }>
-                    <TableCell component="th" scope="row" align="left">
+                  <StyledTableRow key={ i }>
+                    <StyledTableCell component="th" scope="row" align="left">
                       {edit && editedId === id ? <EditTask
                         type="taskName"
                       /> : taskName}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row" align="left">
                       {edit && editedId === id ? <EditTask
                         type="description"
                       /> : description}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row" align="left">
                       {edit && editedId === id ? <EditTask
                         type="tag"
                       /> : tag}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row" align="left">
                       {edit && editedId === id ? <EditTask
                         type="priority"
                       /> : priority}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row" align="left">
                       {edit && editedId === id ? <EditTask
                         type="startDate"
                       /> : startDate}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row" align="left">
                       {edit && editedId === id ? <EditTask
                         type="dueDate"
                       /> : dueDate}
-                    </TableCell>
-                    <TableCell component="th" scope="row" align="left">
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row" align="left">
                       <Stack direction="row" spacing={ 2 }>
                         {edit && editedId === id ? <SvgIcon
                           component={ DoneIcon }
@@ -150,8 +172,8 @@ export default function BasicTable() {
                           onClick={ () => handleDelete(id) }
                         />
                       </Stack>
-                    </TableCell>
-                  </TableRow>
+                    </StyledTableCell>
+                  </StyledTableRow>
               ))
             }
         </TableBody>
