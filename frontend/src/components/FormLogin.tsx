@@ -18,10 +18,15 @@ type AuthType = {
 
 export default function FormLogin() {
   const { userData, resetAllFields } = useContext(UserContext);
+
   const { email, password } = userData;
+
   const minLengthPassword = 6;
+
   const isEmailValid = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-_]+\.[A-Za-z]{2,}$/.test(email);
+
   const isPasswordValid = password.length >= minLengthPassword;
+
   const enableButton = isEmailValid && isPasswordValid;
 
   const router = useRouter();
@@ -30,14 +35,20 @@ export default function FormLogin() {
 
   const handleLogin = async (login: AuthType) => {
     const responseData = await requestLogin('/login', login);
+
     if (responseData === undefined) {
       handleErrorAuth(true);
+
       return true;
     }
     handleErrorAuth(false);
+
     const { token } = responseData;
+
     setToken(token);
+
     resetAllFields();
+
     router.push('/main');
   };
 
@@ -62,7 +73,9 @@ export default function FormLogin() {
         flex flex-col items-center
         shadow-2xl"
     >
+
       <TitleLogo />
+
       <h2
         className={ `${poppinsSemiBold.className} sm:text-[24px] text-[18px] 
         text-[#331500] 
@@ -70,21 +83,25 @@ export default function FormLogin() {
       >
         Seja bem-vindo(a)
       </h2>
+
       <h3 className={ `${RobotoLight.className} pt-[20px] text-[12px] sm:text-[18px]` }>
         Digite seu email e senha
       </h3>
+
       <div className="pt-[60px] w-full">
         <InputTextForm
           name="Email"
           hidePasswordIcon={ false }
           type="email"
         />
+
         <InputTextForm
           name="Senha"
           hidePasswordIcon
           type="password"
         />
       </div>
+
       <div className="flex justify-between items-center w-full">
         <InputCheckboxForm textElement={ rememberMeElement } />
         {errorAuth
@@ -103,6 +120,7 @@ export default function FormLogin() {
       >
         Entrar
       </Button>
+
       <p
         className={ `${RobotoLight.className} 
       text-[#4B4B4B] text-[10px] tracking-[0.3px] mt-[30px] ` }
@@ -110,9 +128,11 @@ export default function FormLogin() {
         Não tem contra?
         {' '}
         <Link href="/register" onClick={ resetAllFields }>
+
           <span className="font-bold text-[#000] underline cursor-pointer">
             Registre-se
           </span>
+
         </Link>
       </p>
     </FormControl>

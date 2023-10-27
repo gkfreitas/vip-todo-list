@@ -19,7 +19,7 @@ type DataTask = {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://ivipcoin-todo-list-production-1f37.up.railway.app/',
 });
 
 export const setToken = (token: string) => {

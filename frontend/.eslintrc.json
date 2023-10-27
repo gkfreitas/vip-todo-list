@@ -6,7 +6,9 @@
       "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "parserOptions": { "project": ["./frontend/tsconfig.json"] },
+  "parserOptions": { 
+    "project": "./frontend/tsconfig.json"
+},
   "plugins": [
       "@typescript-eslint"
   ],
